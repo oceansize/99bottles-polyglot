@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reflection.Metadata.Ecma335;
+using System.Collections.Generic;
 
 namespace BeerSong
 {
@@ -7,18 +7,51 @@ namespace BeerSong
     {
         public static string Recite(int startBottles, int takeDown)
         {
-            var verse = FirstVerse(startBottles) + LastVerse(startBottles);
-            return verse;
+            var allVerses = new List<string>();
+            var bottleCount = startBottles;
+            for (int verseCount = takeDown; verseCount > 0; verseCount--)
+            {
+                var newlineChar = "\n";
+
+                if (bottleCount >= 0)
+                {
+                    allVerses.Add(FirstVerse(bottleCount));
+                    allVerses.Add(newlineChar);
+                    allVerses.Add(LastVerse(bottleCount));
+                    bottleCount--;
+                    if (verseCount > 1)
+                    {
+                        allVerses.Add(newlineChar);
+                        allVerses.Add(newlineChar);
+                    }
+                    else if (verseCount == 0)
+                    {
+                        allVerses.Add(newlineChar);
+                    }
+                }
+            }
+            return String.Join("", allVerses.ToArray());
         }
 
-        private static string FirstVerse(int startBottles)
+        private static string FirstVerse(int bottleCount)
         {
-            return $"{startBottles} bottles of beer on the wall, {startBottles} bottles of beer.\n";
+            return bottleCount switch
+            {
+                0 => "No more bottles of beer on the wall, no more bottles of beer.",
+                1 => $"{bottleCount} bottle of beer on the wall, {bottleCount} bottle of beer.",
+                _ => $"{bottleCount} bottles of beer on the wall, {bottleCount} bottles of beer."
+            };
         }
 
-        private static string LastVerse(int startBottles)
+        private static string LastVerse(int bottleCount)
         {
-            return $"Take one down and pass it around, {startBottles - 1} bottles of beer on the wall.";
+            return bottleCount switch
+            {
+                0 => "Go to the store and buy some more, 99 bottles of beer on the wall.",
+                1 => "Take it down and pass it around, no more bottles of beer on the wall.",
+                2 => $"Take one down and pass it around, {bottleCount - 1} bottle of beer on the wall.",
+                _ => $"Take one down and pass it around, {bottleCount - 1} bottles of beer on the wall.",
+            };
         }
     }
 }
