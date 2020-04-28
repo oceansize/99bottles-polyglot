@@ -1,9 +1,24 @@
 ﻿using System;
+using System.Reflection.Metadata.Ecma335;
 
-public static class BeerSong
+namespace BeerSong
 {
-    public static string Recite(int startBottles, int takeDown)
+    public static class BeerSong
     {
-        throw new NotImplementedException("You need to implement this function.");
+        public static string Recite(int startBottles, int takeDown)
+        {
+            var verse = FirstVerse(startBottles) + LastVerse(startBottles);
+            return verse;
+        }
+
+        private static string FirstVerse(int startBottles)
+        {
+            return $"{startBottles} bottles of beer on the wall, {startBottles} bottles of beer.\n";
+        }
+
+        private static string LastVerse(int startBottles)
+        {
+            return $"Take one down and pass it around, {startBottles - 1} bottles of beer on the wall.";
+        }
     }
 }
